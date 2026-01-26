@@ -30,7 +30,7 @@ export default function ProjectSection() {
             <div className={'overflow-hidden w-[1260px] py-[14px]'} ref={emblaRef}>
                 <div className={`-ml-[30px] flex flex-row`}>
                     {projects.map((s) => (
-                        <div key={s.title} className={'shrink-0 basis-full pl-[30px]'}>
+                        <div key={s.title} className={'shrink-0 basis-full flex justify-center pl-[30px]'}>
                             <ProjectCard
                                 title={s.title} beforeImage={s.beforeImage} afterImage={s.afterImage} text={s.text} afterAlt={s.afterAlt} beforeAlt={s.beforeAlt}
                             />
