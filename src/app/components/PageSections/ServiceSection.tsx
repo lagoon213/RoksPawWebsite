@@ -61,7 +61,7 @@ export default function FeaturesList() {
                 <div className={'overflow-hidden w-[1260px] py-[14px]'} ref={emblaRef}>
                     <div className={`-ml-[30px] flex flex-row`}>
                         {services.map((s) => (
-                            <div key={s.title} className={'shrink-0 basis-1/3 pl-[30px]'}>
+                            <div key={s.title} className={'shrink-0 basis-full sm:basis-1/2 lg:basis-1/3 pl-[30px]'}>
                                 <ServiceCard
                                     image={s.image}
                                     alt={s.alt}

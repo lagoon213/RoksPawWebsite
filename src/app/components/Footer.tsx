@@ -1,4 +1,4 @@
-﻿
+﻿import Link from "next/link";
 export default function Footer(){
     return(
         <div className={'bg-[#D9D9D9] w-full h-[500px] mt-[100px] overflow-hidden relative cursor-default'}>
@@ -26,7 +26,7 @@ export default function Footer(){
 
                     <div className={'flex flex-col justify-self-end'}>
                         <p className={'font-semibold text-[32px]'}>Juridisch</p>
-                        <a className={'cursor-pointer underline hover:text-white z-10'}>privacyverklaring</a>
+                        <Link href="/privacy" className={'cursor-pointer underline hover:text-white z-10'}>privacyverklaring</Link>
                         <a className={'cursor-pointer underline hover:text-white'}>algemene voorwaarden</a>
                     </div>
 

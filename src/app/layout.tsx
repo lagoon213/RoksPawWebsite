@@ -46,6 +46,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+
         <body
             className={`${lalezar.variable} ${jost.variable} ${juliusSansOne.variable} ${k2d.variable} ${leagueSpartan.variable} antialiased`}
         >
