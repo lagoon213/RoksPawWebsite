@@ -48,34 +48,54 @@ const services = [
 ];
 
 export default function FeaturesList() {
-    const [emblaRef, emblaApi] = useEmblaCarousel({loop: true});
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
-    return (
-        <div className={'flex flex-col mt-[100px] mb-[100px] items-center gap-[40px] cursor-default'}>
-            <p className={'text-[#3B3B3B] text-[64px] font-tertiary'}>Diensten</p>
+  return (
+    <div className="flex flex-col mt-12 sm:mt-[100px] mb-12 sm:mb-[100px] items-center gap-6 sm:gap-[40px] cursor-default px-4">
+      <p className="text-[#3B3B3B] text-2xl sm:text-4xl lg:text-[64px] font-tertiary">
+        Diensten
+      </p>
 
-            <div className={'flex flex-row gap-[20px]'}>
-                <button onClick={() => emblaApi?.scrollPrev()}
-                        className={'font-tertiary text-[128px] cursor-pointer text-[#6D6D6D]'}> &lt; </button>
+      <div className="flex items-center gap-2 sm:gap-[20px] w-full max-w-[1260px]">
+        {/* Prev */}
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollPrev()}
+          className="font-tertiary text-5xl sm:text-7xl lg:text-[128px] leading-none cursor-pointer text-[#6D6D6D] select-none px-1"
+          aria-label="Vorige"
+        >
+          &lt;
+        </button>
 
-                <div className={'overflow-hidden w-[1260px] py-[14px]'} ref={emblaRef}>
-                    <div className={`-ml-[30px] flex flex-row`}>
-                        {services.map((s) => (
-                            <div key={s.title} className={'shrink-0 basis-full sm:basis-1/2 lg:basis-1/3 pl-[30px]'}>
-                                <ServiceCard
-                                    image={s.image}
-                                    alt={s.alt}
-                                    title={s.title}
-                                    description={s.description}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <button onClick={() => emblaApi?.scrollNext()}
-                        className={'font-tertiary text-[128px] cursor-pointer text-[#6D6D6D]'}> &gt; </button>
-            </div>
+        {/* Viewport */}
+        <div className="overflow-hidden w-full py-3 sm:py-[14px]" ref={emblaRef}>
+          <div className="-ml-4 sm:-ml-[30px] flex">
+            {services.map((s) => (
+              <div
+                key={s.title}
+                className="shrink-0 basis-full sm:basis-1/2 lg:basis-1/3 pl-4 sm:pl-[30px]"
+              >
+                <ServiceCard
+                  image={s.image}
+                  alt={s.alt}
+                  title={s.title}
+                  description={s.description}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-    );
+
+        {/* Next */}
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollNext()}
+          className="font-tertiary text-5xl sm:text-7xl lg:text-[128px] leading-none cursor-pointer text-[#6D6D6D] select-none px-1"
+          aria-label="Volgende"
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
+  );
 }
