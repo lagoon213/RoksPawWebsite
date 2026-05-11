@@ -2,6 +2,20 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Email (contact form)
+
+This project sends emails via Resend from the API route `POST /api/send`.
+
+Set these environment variables:
+
+- `RESEND_API_KEY` (required)
+- `RESEND_FROM` (optional, default: `RoksPaw <contact@rokspaw.nl>`)
+- `CONTACT_TO` (optional, default: `pawelstandowicz@gmail.com`, comma-separated supported)
+
+Local development: create a `.env.local` file in the project root.
+
+Note: Resend only allows sending from addresses/domains that are verified in your Resend account. If `RESEND_FROM` uses an unverified domain, the API will return an error.
+
 First, run the development server:
 
 ```bash

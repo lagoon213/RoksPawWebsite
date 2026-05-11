@@ -36,7 +36,7 @@ export default function Home() {
 
 <ServiceSection></ServiceSection>
 
-<div className="place-items-center mt-8 sm:mt-[50px] flex flex-col gap-6 sm:gap-[30px]" id="contact-section">
+<div className="place-items-center mt-8 sm:mt-[50px] flex flex-col gap-6 sm:gap-[30px]">
   <div className="border-t-2 border-t-[#3B3B3B] w-[90%] sm:w-[80%] max-w-[1100px]" />
 
   <div className="flex flex-row justify-end w-[90%] sm:w-[80%] max-w-[1100px] gap-3 sm:gap-[20px]">

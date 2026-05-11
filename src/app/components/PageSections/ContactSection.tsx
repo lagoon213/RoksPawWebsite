@@ -1,27 +1,72 @@
 ﻿'use client';
 import React from "react";
 
-
-async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-
-  const formData = new FormData(e.currentTarget);
-
-  const res = await fetch("/api/send", {
-    method: "POST",
-    body: formData,
-  });
-
-  const result = await res.json();
-  console.log("API response:", res.status, result);
-}
-
 export default function ContactSection() {
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+  const [submitState, setSubmitState] = React.useState<
+    | { status: "idle" }
+    | { status: "sending" }
+    | { status: "success"; message: string }
+    | { status: "error"; message: string }
+  >({ status: "idle" });
+
+  const fallbackErrorMessage =
+    "formulier werkt niet bel of app aub op nummer: 06 25344505";
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formEl = e.currentTarget;
+
+    setSubmitState({ status: "sending" });
+
+    const formData = new FormData(formEl);
+    // The UI allows removing files from the list, but the underlying <input type="file">
+    // can't be surgically edited. To avoid sending "removed" files, we rebuild the images
+    // payload from `selectedFiles`.
+    formData.delete("images");
+    for (const file of selectedFiles) {
+      formData.append("images", file);
+    }
+
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      let result: any = null;
+      try {
+        result = await res.json();
+      } catch {
+        // Non-JSON error; fall back to generic message.
+      }
+
+      if (!res.ok || !result?.ok) {
+        console.error("/api/send failed:", res.status, result);
+        setSubmitState({ status: "error", message: fallbackErrorMessage });
+        return;
+      }
+
+      setSubmitState({
+        status: "success",
+        message: "Bedankt! Je bericht is verstuurd.",
+      });
+      formEl.reset();
+      setSelectedFiles([]);
+    } catch (err: any) {
+      console.error("/api/send exception:", err);
+      setSubmitState({
+        status: "error",
+        message: fallbackErrorMessage,
+      });
+    }
+  }
 
   return (
-    <div className="mt-12 sm:mt-[100px] flex flex-col items-center cursor-default px-4" id="contact-section">
-      <p className="text-[#3B3B3B] text-2xl sm:text-4xl lg:text-[64px] font-tertiary">
+    <div className="relative mt-12 sm:mt-[100px] flex flex-col items-center cursor-default px-4" id="contact-section">
+      <p className="relative z-20 text-[#3B3B3B] text-2xl sm:text-4xl lg:text-[64px] font-tertiary">
         Contact
       </p>
 
@@ -148,9 +193,22 @@ export default function ContactSection() {
                                p-3 sm:p-[15px] bg-white rounded-[10px]
                                hover:bg-white/20 cursor-pointer"
                     type="submit"
+                    disabled={submitState.status === "sending"}
                   >
-                    Verstuur
+                    {submitState.status === "sending" ? "Versturen..." : "Verstuur"}
                   </button>
+
+                  {submitState.status === "success" && (
+                    <p className="font-main text-base sm:text-xl text-[#3E3E3E] text-center w-full sm:w-[80%]">
+                      {submitState.message}
+                    </p>
+                  )}
+
+                  {submitState.status === "error" && (
+                    <p className="font-main text-base sm:text-xl text-red-600 text-center w-full sm:w-[80%]">
+                      {submitState.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
