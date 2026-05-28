@@ -5,6 +5,7 @@ interface EmailTemplateProps {
     title: string;
     content: string;
     contactMethod: string;
+    contactDetail: string;
     imageCount?: number;
 }
 
@@ -13,6 +14,7 @@ export function EmailTemplate({
                                   title,
                                   content,
                                   contactMethod,
+                                  contactDetail,
                                   imageCount,
                               }: EmailTemplateProps) {
     return (
@@ -21,6 +23,7 @@ export function EmailTemplate({
             <p>Tytuł: {title}</p>
             <p>Opis: {content}</p>
             <p>Jak klient chce, aby się z nim skontaktować: {contactMethod}</p>
+            <p>Dane kontaktowe klienta: {contactDetail}</p>
 
             {imageCount && imageCount > 0 && (
                 <p>Liczba załączonych zdjęć: {imageCount}</p>

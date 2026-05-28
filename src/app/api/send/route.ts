@@ -47,14 +47,15 @@ export async function POST(request: Request) {
         const title = String(formData.get("title") ?? "");
         const content = String(formData.get("context") ?? "");
         const contactMethod = String(formData.get("contactMethod") ?? "");
+        const contactDetail = String(formData.get("contactDetail") ?? "");
 
-        if (!name || !title || !content || !contactMethod) {
+        if (!name || !title || !content || !contactMethod || !contactDetail) {
             return Response.json(
                 {
                     ok: false,
                     error: {
                         message:
-                            "Missing required fields: name, title, context, contactMethod.",
+                            "Missing required fields: name, title, context, contactMethod, contactDetail.",
                     },
                 },
                 { status: 400 }
@@ -86,6 +87,7 @@ export async function POST(request: Request) {
                 title,
                 content,
                 contactMethod,
+                contactDetail,
                 imageCount: files.length,
             }),
         };

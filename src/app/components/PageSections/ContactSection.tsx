@@ -3,6 +3,7 @@ import React from "react";
 
 export default function ContactSection() {
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+  const [contactMethod, setContactMethod] = React.useState("");
   const [submitState, setSubmitState] = React.useState<
     | { status: "idle" }
     | { status: "sending" }
@@ -55,6 +56,7 @@ export default function ContactSection() {
       });
       formEl.reset();
       setSelectedFiles([]);
+      setContactMethod("");
     } catch (err: any) {
       console.error("/api/send exception:", err);
       setSubmitState({
@@ -122,23 +124,61 @@ export default function ContactSection() {
 
                     <div className="flex flex-wrap gap-4 sm:gap-10 mt-3">
                       <label className="flex items-center gap-2">
-                        <input required type="radio" name="contactMethod" value="call"
-                          className="scale-125 sm:scale-150 cursor-pointer" />
+                        <input
+                          required
+                          type="radio"
+                          name="contactMethod"
+                          value="call"
+                          checked={contactMethod === "call"}
+                          onChange={() => setContactMethod("call")}
+                          className="scale-125 sm:scale-150 cursor-pointer"
+                        />
                         <span className="font-main text-base sm:text-xl">Bellen</span>
                       </label>
 
                       <label className="flex items-center gap-2">
-                        <input type="radio" name="contactMethod" value="email"
-                          className="scale-125 sm:scale-150 cursor-pointer" />
+                        <input
+                          type="radio"
+                          name="contactMethod"
+                          value="email"
+                          checked={contactMethod === "email"}
+                          onChange={() => setContactMethod("email")}
+                          className="scale-125 sm:scale-150 cursor-pointer"
+                        />
                         <span className="font-main text-base sm:text-xl">Email</span>
                       </label>
 
                       <label className="flex items-center gap-2">
-                        <input type="radio" name="contactMethod" value="whatsapp"
-                          className="scale-125 sm:scale-150 cursor-pointer" />
+                        <input
+                          type="radio"
+                          name="contactMethod"
+                          value="whatsapp"
+                          checked={contactMethod === "whatsapp"}
+                          onChange={() => setContactMethod("whatsapp")}
+                          className="scale-125 sm:scale-150 cursor-pointer"
+                        />
                         <span className="font-main text-base sm:text-xl">Whatsapp</span>
                       </label>
                     </div>
+
+                    {contactMethod && (
+                      <div className="mt-4 max-w-[520px]">
+                        <p className="font-spartan font-[200] text-base sm:text-xl lg:text-[30px]">
+                          {contactMethod === "email" ? "Uw e-mailadres" : "Uw telefoonnummer"}
+                        </p>
+                        <input
+                          required
+                          name="contactDetail"
+                          type={contactMethod === "email" ? "email" : "tel"}
+                          className="rounded-[15px] p-3 bg-white w-full border-[#6C6C6C] border-2"
+                          placeholder={
+                            contactMethod === "email"
+                              ? "Bijv. jan@voorbeeld.nl"
+                              : "Bijv. 06 12345678"
+                          }
+                        />
+                      </div>
+                    )}
                   </fieldset>
                 </div>
 
