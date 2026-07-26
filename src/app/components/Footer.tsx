@@ -2,93 +2,66 @@
 
 export default function Footer() {
   return (
-    <footer className="bg-[#D9D9D9] w-full mt-[clamp(3rem,6vw,6.25rem)] overflow-hidden relative cursor-default">
-      {/* Watermark */}
-      <div className="pointer-events-none select-none absolute inset-0 z-0 flex items-center justify-center opacity-[0.22] sm:opacity-[0.34]">
-        <div className="-rotate-[60deg] sm:rotate-0 origin-center translate-y-6 sm:translate-y-0 text-center">
-          <p className="font-brand text-[#A4A4A4] whitespace-nowrap tracking-[0.28em] sm:tracking-[0.4em] text-[clamp(3.8rem,8vw,8.75rem)]">
-            RoksPaw
+    <footer className="mt-0 bg-[#2B2620] text-[#F3ECDB]">
+      <div className="mx-auto grid max-w-[1160px] gap-10 px-4 py-16 sm:px-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-[#D9A441] font-tertiary text-[1.1rem] text-[#1E1B16]">
+              RP
+            </div>
+            <div className="leading-none">
+              <div className="font-tertiary text-[1.15rem]">RoksPaw</div>
+              <div className="font-secondary text-[0.65rem] uppercase tracking-[0.18em] text-[#D9A441]">
+                Timmermannen
+              </div>
+            </div>
+          </div>
+          <p className="max-w-[32ch] text-sm leading-6 text-[#F3ECDB]/75">
+            Vakkundig timmerwerk in Tilburg en omstreken, van klein herstel tot complete renovatie.
           </p>
-          <p className="font-secondary text-[#A4A4A4] whitespace-nowrap text-[clamp(1.6rem,3.2vw,3.75rem)]">
-            Timmermannen
-          </p>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-secondary text-[0.7rem] uppercase tracking-[0.18em] text-[#D9A441]">
+            Navigatie
+          </h4>
+          <a className="mb-2 block text-sm text-[#F3ECDB]/75 transition hover:text-[#D9A441]" href="#home">
+            Home
+          </a>
+          <a className="mb-2 block text-sm text-[#F3ECDB]/75 transition hover:text-[#D9A441]" href="#diensten">
+            Diensten
+          </a>
+          <a className="block text-sm text-[#F3ECDB]/75 transition hover:text-[#D9A441]" href="#contact">
+            Contact
+          </a>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-secondary text-[0.7rem] uppercase tracking-[0.18em] text-[#D9A441]">
+            Bedrijf
+          </h4>
+          <p className="mb-2 text-sm text-[#F3ECDB]/75">RoksPaw</p>
+          <p className="mb-2 text-sm text-[#F3ECDB]/75">KvK: 85712116</p>
+          <p className="text-sm text-[#F3ECDB]/75">Besoijenstraat 22, 5043 WX Tilburg</p>
+        </div>
+
+        <div>
+          <h4 className="mb-4 font-secondary text-[0.7rem] uppercase tracking-[0.18em] text-[#D9A441]">
+            Juridisch
+          </h4>
+          <Link className="mb-2 block text-sm text-[#F3ECDB]/75 transition hover:text-[#D9A441]" href="/privacy">
+            Privacyverklaring
+          </Link>
+          <Link className="block text-sm text-[#F3ECDB]/75 transition hover:text-[#D9A441]" href="/rights">
+            Algemene voorwaarden
+          </Link>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 py-[clamp(2.5rem,5vw,6rem)]">
-        <div className="font-main text-[#3E3E3E] grid grid-cols-1 md:grid-cols-3 gap-y-[clamp(1.75rem,3.5vw,3.5rem)] gap-x-[clamp(1.25rem,3vw,4rem)]">
-          {/* Adres */}
-          <div className="md:col-start-1 md:row-start-1">
-            <p className="font-semibold text-[clamp(1.25rem,1.8vw,2rem)]">Adres</p>
-            <p className="text-[clamp(1rem,1.1vw,1.125rem)]">Besoijenstraat 22, Tilburg</p>
-            <p className="text-[clamp(1rem,1.1vw,1.125rem)]">5043WX</p>
-          </div>
-
-          {/* Nav */}
-          <div className="md:col-start-2 md:row-start-1 md:text-center md:justify-self-center md:translate-y-[clamp(0rem,0.6vw,0.6rem)]">
-            <div className="flex flex-wrap md:flex-nowrap justify-start md:justify-center gap-x-[clamp(1.25rem,3vw,3.5rem)] gap-y-3 underline decoration-solid text-[clamp(1rem,1.2vw,1.25rem)]">
-              <a className="cursor-pointer hover:text-white transition" href="#home-section">
-                Home
-              </a>
-              <a className="cursor-pointer hover:text-white transition" href="#service-section">
-                Diensten
-              </a>
-              <a className="cursor-pointer hover:text-white transition" href="#project-section">
-                Projecten
-              </a>
-              <a className="cursor-pointer hover:text-white transition" href="#contact-section">
-                Contact
-              </a>
-            </div>
-          </div>
-
-          {/* Juridisch */}
-          <div className="flex flex-col md:col-start-3 md:row-start-1 md:justify-self-end">
-            <p className="font-semibold text-[clamp(1.25rem,1.8vw,2rem)]">Juridisch</p>
-            <Link
-              href="/privacy"
-              className="cursor-pointer underline hover:text-white transition text-[clamp(1rem,1.1vw,1.125rem)]"
-            >
-              privacyverklaring
-            </Link>
-            <Link
-              href="/rights"
-              className="cursor-pointer underline hover:text-white transition text-[clamp(1rem,1.1vw,1.125rem)]"
-            >
-              algemene voorwaarden
-            </Link>
-          </div>
-
-          {/* Contact */}
-          <div className="flex flex-col md:col-start-1 md:row-start-2">
-            <p className="font-semibold text-[clamp(1.25rem,1.8vw,2rem)]">Contact</p>
-            <a
-              className="underline cursor-pointer hover:text-white transition text-[clamp(1rem,1.1vw,1.125rem)]"
-              href="mailto:pawelstandowicz@gmail.com"
-            >
-              pawelstandowicz@gmail.com
-            </a>
-            <a
-              className="underline cursor-pointer hover:text-white transition text-[clamp(1rem,1.1vw,1.125rem)]"
-              href="tel:+31625344505"
-            >
-              +31 6 25344505
-            </a>
-          </div>
-
-          {/* Bedrijf */}
-          <div className="flex flex-col md:col-start-3 md:row-start-2 md:justify-self-end">
-            <p className="font-semibold text-[clamp(1.25rem,1.8vw,2rem)]">Bedrijf</p>
-            <p className="text-[clamp(1rem,1.1vw,1.125rem)]">Bedrijfsnaam: RoksPaw</p>
-            <p className="text-[clamp(1rem,1.1vw,1.125rem)]">KvK: 85712116</p>
-          </div>
-        </div>
-
-        <div className="mt-[clamp(2rem,4vw,3.5rem)]">
-          <p className="flex justify-center text-center text-[clamp(0.9rem,1vw,1.05rem)] text-[#3E3E3E]">
-            © 2026 RoksPaw Timmerwerken. Alle rechten voorbehouden.
-          </p>
+      <div className="border-t border-[#F3ECDB]/10">
+        <div className="mx-auto flex max-w-[1160px] flex-col gap-2 px-4 py-5 text-xs text-[#F3ECDB]/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-8">
+          <span>© 2026 RoksPaw Timmerwerken. Alle rechten voorbehouden.</span>
+          <span>pawelstandowicz@gmail.com · +31 6 25344505</span>
         </div>
       </div>
     </footer>

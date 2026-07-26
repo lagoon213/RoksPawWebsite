@@ -1,46 +1,19 @@
 ﻿import { Resend } from "resend";
 import {EmailTemplate} from '@/app/components/EmailTemplate';
 
-export const runtime = "nodejs";
-
 export async function POST(request: Request) {
-    console.log("🔥 API SEND HIT");
+
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+        return Response.json(
+            { ok: false, error: { message: "Missing RESEND_API_KEY" } },
+            { status: 500 }
+        );
+    }
+
+    const resend = new Resend(apiKey);
 
     try {
-        const resendApiKey = process.env.RESEND_API_KEY;
-        if (!resendApiKey) {
-            return Response.json(
-                {
-                    ok: false,
-                    error: {
-                        message:
-                            "Missing RESEND_API_KEY. Add it to your environment (local .env.local or hosting provider env vars).",
-                    },
-                },
-                { status: 500 }
-            );
-        }
-
-        const resend = new Resend(resendApiKey);
-
-        const from = process.env.RESEND_FROM ?? "RoksPaw <contact@rokspaw.nl>";
-        const to = (process.env.CONTACT_TO ?? "pawelstandowicz@gmail.com")
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean);
-        if (to.length === 0) {
-            return Response.json(
-                {
-                    ok: false,
-                    error: {
-                        message:
-                            "CONTACT_TO is empty. Provide at least one recipient email (comma-separated supported).",
-                    },
-                },
-                { status: 500 }
-            );
-        }
-
         const formData = await request.formData();
 
         const name = String(formData.get("name") ?? "");
@@ -48,27 +21,48 @@ export async function POST(request: Request) {
         const content = String(formData.get("context") ?? "");
         const contactMethod = String(formData.get("contactMethod") ?? "");
         const contactDetail = String(formData.get("contactDetail") ?? "");
+        const honeypot = String(formData.get("website") ?? "");
+
+        if (honeypot) {
+            return Response.json({ ok: false, error: { message: "Rejected" } }, { status: 400 });
+        }
 
         if (!name || !title || !content || !contactMethod || !contactDetail) {
-            return Response.json(
-                {
-                    ok: false,
-                    error: {
-                        message:
-                            "Missing required fields: name, title, context, contactMethod, contactDetail.",
-                    },
-                },
-                { status: 400 }
-            );
+            return Response.json({ ok: false, error: { message: "Missing required fields" } }, { status: 400 });
+        }
+
+        if (!['call', 'email', 'whatsapp'].includes(contactMethod)) {
+            return Response.json({ ok: false, error: { message: "Invalid contact method" } }, { status: 400 });
+        }
+
+        if (name.length > 120 || title.length > 140 || content.length > 4000 || contactDetail.length > 120) {
+            return Response.json({ ok: false, error: { message: "Input too long" } }, { status: 400 });
         }
 
         const files = formData
             .getAll("images")
-            .filter((v): v is File => v instanceof File)
-            .filter((f) => {
-                const size = (f as any)?.size;
-                return typeof size === "number" ? size > 0 : true;
-            });
+            .filter((v): v is File => v instanceof File);
+
+        if (files.length > 5) {
+            return Response.json({ ok: false, error: { message: "Too many files" } }, { status: 400 });
+        }
+
+        let totalSize = 0;
+        for (const file of files) {
+            if (!file.type.startsWith("image/")) {
+                return Response.json({ ok: false, error: { message: "Invalid file type" } }, { status: 400 });
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                return Response.json({ ok: false, error: { message: "File too large" } }, { status: 400 });
+            }
+
+            totalSize += file.size;
+        }
+
+        if (totalSize > 15 * 1024 * 1024) {
+            return Response.json({ ok: false, error: { message: "Attachments too large" } }, { status: 400 });
+        }
 
         const attachments = await Promise.all(
             files.map(async (file) => {
@@ -78,9 +72,9 @@ export async function POST(request: Request) {
             })
         );
 
-        const emailPayload: Parameters<typeof resend.emails.send>[0] = {
-            from,
-            to,
+        const { data, error } = await resend.emails.send({
+            from: "RoksPaw <contact@rokspaw.nl>",
+            to: ["pawelstandowicz@gmail.com"],
             subject: `Contactformulier: ${title}`,
             react: EmailTemplate({
                 firstName: name,
@@ -90,34 +84,19 @@ export async function POST(request: Request) {
                 contactDetail,
                 imageCount: files.length,
             }),
-        };
-
-        if (attachments.length > 0) {
-            (emailPayload as any).attachments = attachments;
-        }
-
-        const { data, error } = await resend.emails.send(emailPayload);
+            attachments,
+        });
 
         if (error) {
             console.error("RESEND ERROR:", error);
-            return Response.json(
-                {
-                    ok: false,
-                    error: {
-                        message: (error as any)?.message ?? "Resend send failed",
-                        name: (error as any)?.name,
-                        statusCode: (error as any)?.statusCode,
-                    },
-                },
-                { status: 500 }
-            );
+            return Response.json({ ok: false, error: { message: "Unable to send message" } }, { status: 500 });
         }
 
         return Response.json({ ok: true, data }, { status: 200 });
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("SEND ERROR:", err);
         return Response.json(
-            { ok: false, error: { message: err?.message ?? String(err) } },
+            { ok: false, error: { message: "Unable to send message" } },
             { status: 500 }
         );
     }
